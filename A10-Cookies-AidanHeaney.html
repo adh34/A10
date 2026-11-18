@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A10 - JavaScript Cookies Demo</title>
+</head>
+<body onload="checkCookie()">
+
+  <header>
+    <h1>IS 117 - JavaScript Cookie Demo</h1>
+  </header>
+
+  <main>
+    <p id="cookie-display">Checking for saved cookie...</p>
+    <p>Reload this page to verify that your stored cookie persists without triggering the input pop-up box again.</p>
+    <button type="button" onclick="resetCookie()">Delete Cookie &amp; Re-test</button>
+  </main>
+
+  <footer>
+    <p>&copy; November 17, 2026 - Aidan Heaney</p>
+  </footer>
+
+  <script>
+    function setCookie(cname, cvalue, exdays) {
+      const d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      let expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + encodeURIComponent(cvalue) + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    function checkCookie() {
+      let user = getCookie("username");
+      const display = document.getElementById("cookie-display");
+
+      if (user !== "") {
+        display.textContent = "Welcome back! Saved cookie value: " + user;
+      } else {
+        user = prompt("Please enter your name to save in a cookie:", "");
+        if (user !== "" && user !== null) {
+          setCookie("username", user, 365);
+          display.textContent = "Cookie saved! Value: " + user;
+        } else {
+          display.textContent = "No cookie was entered. Reload the page to try again.";
+        }
+      }
+    }
+
+    function resetCookie() {
+      document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      location.reload();
+    }
+  </script>
+
+</body>
+</html>
